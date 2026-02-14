@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="About">
+        <menu>
+            <item
+                android:id="@+id/nav_github"
+                android:icon="@android:drawable/ic_menu_view"
+                android:title="GitHub" />
+            <item
+                android:id="@+id/nav_checkCALC"
+                android:icon="@android:drawable/ic_menu_view"
+                android:title="Check for Updates" />
+        </menu>
+    </item>
+</menu>

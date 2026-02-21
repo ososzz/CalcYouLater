@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbar)
 
-        // Handle hamburger menu click
         binding.toolbar.setNavigationOnClickListener {
             binding.drawerLayout.openDrawer(GravityCompat.START)
         }
@@ -50,11 +49,9 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
                 R.id.nav_github -> {
-                    // Open GitHub page
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/ososzz"))
                     startActivity(intent)
                 }
-
             }
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             true
@@ -105,12 +102,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupFunctionButtons() {
-        binding.btnClear.setOnClickListener {
+        binding.btnAllClear.setOnClickListener {
             currentNumber = ""
             previousNumber = ""
             operation = ""
             isNewOperation = true
+            binding.tvExpression.text = ""
             updateDisplay("0")
+        }
+
+        binding.btnToggleSign.setOnClickListener {
+            if (currentNumber.isNotEmpty() && currentNumber != "0") {
+                currentNumber = if (currentNumber.startsWith("-")) {
+                    currentNumber.substring(1)
+                } else {
+                    "-$currentNumber"
+                }
+                updateDisplay(currentNumber)
+            }
         }
     }
 
@@ -127,6 +136,7 @@ class MainActivity : AppCompatActivity() {
         previousNumber = currentNumber
         currentNumber = ""
         isNewOperation = false
+        updateExpression()
     }
 
     private fun calculate() {
@@ -145,6 +155,7 @@ class MainActivity : AppCompatActivity() {
                 if (num2 == 0.0) {
                     updateDisplay("Error")
                     resetCalculator()
+                    binding.tvExpression.text = ""
                     return
                 }
                 num1 / num2
@@ -156,6 +167,7 @@ class MainActivity : AppCompatActivity() {
         previousNumber = ""
         operation = ""
         isNewOperation = true
+        binding.tvExpression.text = ""
         updateDisplay(currentNumber)
     }
 
@@ -174,8 +186,22 @@ class MainActivity : AppCompatActivity() {
         isNewOperation = true
     }
 
+    private fun updateExpression() {
+        val expression = when {
+            previousNumber.isNotEmpty() && operation.isNotEmpty() && currentNumber.isNotEmpty() -> {
+                "$previousNumber $operation $currentNumber"
+            }
+            previousNumber.isNotEmpty() && operation.isNotEmpty() -> {
+                "$previousNumber $operation"
+            }
+            else -> ""
+        }
+        binding.tvExpression.text = expression
+    }
+
     private fun updateDisplay(value: String) {
         binding.tvDisplay.text = if (value.isEmpty()) "0" else value
+        updateExpression()
     }
 
     override fun onBackPressed() {

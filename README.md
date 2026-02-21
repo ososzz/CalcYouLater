@@ -2,4 +2,6 @@
 
 A simple calculator made with kotlin.
 
+Requires Android 12 and later.
+
 Special thanks to my fellow supporter(s).
